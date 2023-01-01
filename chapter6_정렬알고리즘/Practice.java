@@ -293,10 +293,76 @@ public class Practice {
         }
     }
 
+
+    public static int[] buf;
+
+    //병합 정렬 , 분할 정복
+    public static void mergeSort(int a[],int left , int right){
+        //left < right 일때만 실행 , 이게 만족못하면 요소가 1이라는 것
+        if(left < right){
+            int lPointer = left;
+            int center = (left+right)/2;
+            int rPointer = center+1;
+            int pointer = left;
+            int buffPointer = 0;
+            //왼쪽 리스트 정렬
+            mergeSort(a,lPointer,center);
+            //오른쪽 리스트 정렬
+            mergeSort(a,rPointer,right);
+            //buf 에 left ~ center 왼쪽 리스트 복사
+            for(int i=left;i<=center;i++){
+                buf[buffPointer++] = a[i];
+            }
+            buffPointer = 0;
+            //비교 후 a 에 복사한다.
+            while(lPointer <= center & rPointer <= right){
+                if(buf[buffPointer] <= a[rPointer]){
+                    a[pointer++] = buf[buffPointer++];
+                    lPointer++;
+                }
+                else{
+                    a[pointer++] = a[rPointer++];
+                }
+            }
+
+            //buf 에 남은거 있으면 a 에 다넣는다.
+            while (lPointer <= center){
+                a[pointer++] = buf[buffPointer++];
+                lPointer++;
+            }
+        }
+    }
+
+    //도수 정렬
+    public static int[] countingSort(int a[],int min, int max){
+        //정렬될 b를 생성
+        int b[] = new int[a.length];
+        //도수 분포표를 저장할 c 생성, min max 를 -> 0, max - min 으로 매핑
+        int c[] = new int[max-min+1];
+        //실제값 -> 실제값 - min 으로 매핑하면서 도수분포표 만들기
+        for(int i=0;i<a.length;i++){
+            c[a[i]-min]++;
+        }
+        //누적도수분포표 만들기
+        for(int i=1;i<=max;i++){
+            c[i] += c[i-1];
+        }
+        //정렬된 b 만들기
+        for(int i=a.length-1;i>=0;i--){
+            b[--c[a[i]-min]] = a[i];
+        }
+        a = null;
+        return b;
+    }
+
     public static void main(String[] args) {
-        int a[] = {1,3,9,4,7,11,10,5,6,2,-10,22,77,44};
-        quickSort2(a,0,a.length-1);
+        int a[] = {1,3,9,4,7,11,10,5,6,2,0,22,77,44};
+        buf = new int[a.length];
+        a = countingSort(a,0,77);
         System.out.println(Arrays.toString(a));
     }
+
+
+
 }
 
