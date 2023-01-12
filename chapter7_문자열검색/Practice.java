@@ -81,39 +81,49 @@ public class Practice {
         return (index<=end)?index:-1;
     }
 
-    //보이어 무어
+    //보이어 무어, text 와 pattern 이 아스키 코드안에 있는 문자로만 구성되야 알고리즘이 적용됨
     public static int BM(String text, String pattern){
-        //0 ~ max 까지 이므로 max+1 개 배열 하지만 한글은 저장 못한다...
-        int[] skip = new int[Character.MAX_VALUE+1];
         int patternLength = pattern.length();
         int textLength = text.length();
-        int patternPointer = patternLength-1;
-        int textPointer = patternLength-1;
-        //skip table 만들기
-        for(int i=0;i<=Character.MAX_VALUE;i++){
+        int patternPointer = patternLength - 1;
+        int textPointer = patternLength - 1;
+        //건너뛰기 표 만들기 , 0 - 127 까지 값을 담아야하므로 128크기여야함
+        int [] skip = new int[Character.MAX_VALUE+1]; 
+        //처음에는 모두 patternLength 으로 초기화
+        for(int i=0;i<skip.length;i++){
             skip[i] = patternLength;
         }
-        //마지막 문자는 할필요 없음 어차피 patternLength 넣어야함.
+        // 0 ~ patternLength -2 인덱스에 해당되는 패턴 문자만 갱신해주면됨 , 패턴의 마지막 문자는 어차피 n임
         for(int i=0;i<patternLength-1;i++){
             skip[pattern.charAt(i)] = patternLength-i-1;
         }
         //검색
         while (textPointer < textLength){
-            boolean equalFlag = true;
-            int i = textPointer;
-            int j = patternPointer;
-            //같은지 비교
-
+            while (true){
+                System.out.printf("textPointer : %d , patterPointer : %d\t",textPointer,patternPointer);
+                if(pattern.charAt(patternPointer) != text.charAt(textPointer)){
+                    break;
+                }
+                else if(patternPointer == 0){
+                    //찾기 성공
+                    return textPointer;
+                }
+                textPointer--;
+                patternPointer--;
+            }
+            System.out.println("\n"+text.charAt(textPointer));
+            textPointer += skip[text.charAt(textPointer)];
+            patternPointer = patternLength-1;
+            System.out.println("textPointer : "+textPointer);
         }
-        return 0;
+        //찾기 실패
+        return -1;
     }
 
 
     public static void main(String[] args) {
-        String pattern = "엄준식엄";
-        String text = "꼴랑이임엄죽식엄준식엄";
-        int a = '가';
-        //1114112
-        System.out.printf("%d",a);
+        String text = "ABCXDEZCABACABAC";
+        String pattern = "ABAC";
+        System.out.println("\n"+BM(text,pattern));
     }
 }
