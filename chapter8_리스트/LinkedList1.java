@@ -6,7 +6,7 @@ package chapter8_리스트;
 선택 노드 삭제 , 선택 노드 다음으로 옮기기, 모든 노드 삭제, 선택 노드 출력, 모든 노드 출력
 
 -- 메서드를 실행한 이후 노드 포인터의 값 --
-생성자 : null
+생성자 : null  search : 찾은 노드
 addFirst : 삽입한 첫 번쨰 노드  addLast : 삽입한 마지막 노드
 removeFirst : 삭제 후 첫 번째 노드(null 일 수도 있다) removeLast : 삭제 후 마지막 노드(null 일 수도 있다)
 removeCurrentNode : 삭제한 선택 노드 이전 노드를 가리킨다.(null 일 수도)
@@ -21,10 +21,16 @@ public class LinkedList1<E>{
     private Node<E> tail;
     //현재 선택 노드
     private Node<E> currentNode;
+    private int size;
     
 
     public LinkedList1() {
-        head = currentNode = null;
+        head = tail = currentNode = null;
+        size = 0;
+    }
+
+    public int size(){
+        return size;
     }
 
     //검색하기 찾으면 true or false
@@ -53,6 +59,7 @@ public class LinkedList1<E>{
         if(head.next == null){
             tail = node;
         }
+        size++;
     }
 
     //마지막 노드로 삽입
@@ -61,10 +68,12 @@ public class LinkedList1<E>{
         //리스트안에 아무것도 없으면 addFirst 실행
         if(head == null){
             addFirst(data);
+            return;
         }
         Node<E> node = new Node<>(data,null);
         tail.next = node;
         tail = currentNode = node;
+        size++;
     }
 
     //첫 번째 노드 삭제
@@ -79,6 +88,7 @@ public class LinkedList1<E>{
         if(head.next == null){
             tail = head;
         }
+        size--;
     }
 
     //마지막 노드 삭제
@@ -90,6 +100,7 @@ public class LinkedList1<E>{
         }
         if(head.next == null){
             removeFirst();
+            return;
         }
         Node<E> lastNode = head;
         Node<E> lastPreNode = head;
@@ -101,6 +112,7 @@ public class LinkedList1<E>{
         lastPreNode.next = null;
         //tail 이 last 가리키게함.
         tail = currentNode;
+        size--;
     }
 
 
@@ -137,6 +149,7 @@ public class LinkedList1<E>{
         if(currentNode.next == null){
             tail = currentNode;
         }
+        size--;
     }
 
     //모두 삭제
@@ -155,6 +168,7 @@ public class LinkedList1<E>{
             head = ptr;
         }
         tail = currentNode = head;
+        size = 0;
     }
 
     //선택 노드를 뒤로 진행
@@ -171,6 +185,7 @@ public class LinkedList1<E>{
     public void printCurrentNode(){
         if(currentNode == null){
             System.out.println("현재 선택 노드는 없습니다.");
+            return;
         }
         System.out.println(currentNode.data);
     }
@@ -179,6 +194,7 @@ public class LinkedList1<E>{
     public void printAll(){
         if(head == null){
             System.out.println("리스트에는 노드가 존재하지 않습니다.");
+            return;
         }
         Node<E> ptr = head;
         while (ptr != null){
@@ -186,6 +202,113 @@ public class LinkedList1<E>{
             ptr = ptr.next;
         }
         System.out.println();
+    }
+    
+    /*
+    index 를 통한 삭제 추가 메소드들
+     */
+    
+    //index 로 노드 삭제
+    public boolean remove(int index){
+        if(index >= size){
+            return false;
+        }
+        if(index == 0){
+            removeFirst();
+            return true;
+        }
+        if(index == size-1){
+            removeLast();
+            return true;
+        }
+        Node<E> ptr = head.next;
+        Node<E> ptrPre = head;
+        int i=1;
+        while (ptr != null){
+            if(i == index){
+                ptrPre.next = ptr.next;
+                break;
+            }
+            ptrPre = ptr;
+            ptr = ptr.next;
+            i++;
+        }
+        size--;
+        return true;
+    }
+
+    //특정 노드 삭제
+    public boolean remove(E obj){
+        if(search(obj)){
+            removeCurrentNode();
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    //index 로 노드 추가
+    public void add(int index, E obj){
+        if(index >= size){
+            return;
+        }
+        if(index == 0){
+            addFirst(obj);
+            return;
+        }
+        if(index == size-1){
+            addLast(obj);
+            return;
+        }
+        int i = 1;
+        Node<E> ptr = head.next;
+        Node<E> ptrPre = head;
+        while (ptr != null){
+            if(i == index){
+                Node<E> node = new Node<>(obj,ptr);
+                ptrPre.next = node;
+                break;
+            }
+            ptrPre = ptr;
+            ptr = ptr.next;
+            i++;
+        }
+        size++;
+    }
+    
+    //노드의 index 반환하기
+    public int indexOf(E data){
+        if(head == null){
+            return -1;
+        }
+        int i =0;
+        Node<E> ptr = head;
+        while (ptr != null){
+            if(ptr.data.equals(data)){
+                return i;
+            }
+            ptr = ptr.next;
+            i++;
+        }
+        return -1;
+    }
+
+    //index 에 해당되는 노드 가져오기
+    public E get(int index){
+        if(index >= size || head == null){
+            return null;
+        }
+        int i =0;
+        Node<E> ptr = head;
+        while (ptr != null){
+            if(i == index){
+                return ptr.data;
+            }
+            ptr = ptr.next;
+            i++;
+        }
+        return null;
     }
     
     //노드 클래스
@@ -200,7 +323,5 @@ public class LinkedList1<E>{
             this.next = next;
         }
     }
-
-
-
+    
 }

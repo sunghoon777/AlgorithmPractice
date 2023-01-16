@@ -1,7 +1,7 @@
 package chapter8_리스트;
 
-import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.*;
+import java.util.ArrayList;
 
 public class LinkedList1Test {
 
@@ -11,9 +11,11 @@ public class LinkedList1Test {
     public static void main(String[] args) {
         linkedList1 = new LinkedList1<>();
         scanner = new Scanner(System.in);
+
         while (true){
             System.out.println("1 : 첫 번째 노드 추가 2 : 마지막 노드 추가 3: 첫 번째 노드 삭제 4 : 마지막 노드 삭제 5 : 선택 노드 삭제 6 : 선택 노드 다음으로 옮기기" +
-                    " 7 : 모든 노드 삭제 8: 선택 노드 출력 9: 모든 노드 출력 10 : 노드 검색");
+                    " 7 : 모든 노드 삭제 8: 선택 노드 출력 9: 모든 노드 출력 10 : 노드 검색\n" +
+                    "11 : 인덱스로 add  12 : 인덱스로 remove    13: 특정 노드 삭제    14: 특정 노드의 인덱스 얻기   15: index 로 얻기  16: size 얻기");
             System.out.print("입력 >>> ");
             String select = scanner.nextLine();
             switch (select){
@@ -47,10 +49,30 @@ public class LinkedList1Test {
                 case "10":
                     search();
                     break;
+                case "11":
+                    addByIndex();
+                    break;
+                case "12":
+                    removeByIndex();
+                    break;
+                case "13":
+                    removeByObject();
+                    break;
+                case "14":
+                    indexOf();
+                    break;
+                case "15":
+                    getByIndex();
+                    break;
+                case "16" :
+                    size();
+                    break;
                 default:
                     System.out.println("잘못 입력함, 다시 입력하세요");
             }
         }
+
+
     }
 
     private static void addFirst() {
@@ -112,5 +134,51 @@ public class LinkedList1Test {
             System.out.println("존재합니다.");
         else
             System.out.println("존재하지 않습니다.");
+    }
+
+    private static void addByIndex(){
+        System.out.println("추가할 숫자를 입력하세요");
+        Integer element = Integer.valueOf(scanner.nextLine());
+        System.out.println("추가할 index 위치를 입력하세요");
+        int index =  Integer.valueOf(scanner.nextLine());
+        linkedList1.add(index,element);
+    }
+    
+    private static void removeByIndex(){
+        System.out.println("삭제할 index 위치를 입력하세요");
+        int index =  Integer.valueOf(scanner.nextLine());
+        linkedList1.remove(index);
+    }
+
+    public static void removeByObject(){
+        System.out.println("제거할 숫자를 입력하세요");
+        Integer element = Integer.valueOf(scanner.nextLine());
+        if(linkedList1.remove(element)){
+            System.out.println("제거함");
+        }
+        else{
+            System.out.println("해당 숫자 존재하지 않음");
+        }
+    }
+
+    private static void indexOf(){
+        System.out.println("숫자를 입력하세요");
+        Integer element =  Integer.valueOf(scanner.nextLine());
+        System.out.println(linkedList1.indexOf(element)+" 에 있음");
+    }
+    
+    private static void getByIndex(){
+        System.out.println("index 를 입력하세요");
+        int index =  Integer.valueOf(scanner.nextLine());
+        if(linkedList1.get(index) == null){
+            System.out.println("index 잘못됨");
+        }
+        else{
+            System.out.println(linkedList1.get(index));
+        }
+    }
+    
+    private static void size(){
+        System.out.println(linkedList1.size());
     }
 }
