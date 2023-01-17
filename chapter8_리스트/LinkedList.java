@@ -13,7 +13,7 @@ removeCurrentNode : 삭제한 선택 노드 이전 노드를 가리킨다.(null 
 clear : null 
 next : 다음 노드
  */
-public class LinkedList1<E>{
+public class LinkedList<E>{
 
     //머리 노드를 가리킨다.
     private Node<E> head;
@@ -24,7 +24,7 @@ public class LinkedList1<E>{
     private int size;
     
 
-    public LinkedList1() {
+    public LinkedList() {
         head = tail = currentNode = null;
         size = 0;
     }
@@ -203,114 +203,7 @@ public class LinkedList1<E>{
         }
         System.out.println();
     }
-    
-    /*
-    index 를 통한 삭제 추가 메소드들
-     */
-    
-    //index 로 노드 삭제
-    public boolean remove(int index){
-        if(index >= size){
-            return false;
-        }
-        if(index == 0){
-            removeFirst();
-            return true;
-        }
-        if(index == size-1){
-            removeLast();
-            return true;
-        }
-        Node<E> ptr = head.next;
-        Node<E> ptrPre = head;
-        int i=1;
-        while (ptr != null){
-            if(i == index){
-                ptrPre.next = ptr.next;
-                break;
-            }
-            ptrPre = ptr;
-            ptr = ptr.next;
-            i++;
-        }
-        size--;
-        return true;
-    }
 
-    //특정 노드 삭제
-    public boolean remove(E obj){
-        if(search(obj)){
-            removeCurrentNode();
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-    
-    //index 로 노드 추가
-    public void add(int index, E obj){
-        if(index >= size){
-            return;
-        }
-        if(index == 0){
-            addFirst(obj);
-            return;
-        }
-        if(index == size-1){
-            addLast(obj);
-            return;
-        }
-        int i = 1;
-        Node<E> ptr = head.next;
-        Node<E> ptrPre = head;
-        while (ptr != null){
-            if(i == index){
-                Node<E> node = new Node<>(obj,ptr);
-                ptrPre.next = node;
-                break;
-            }
-            ptrPre = ptr;
-            ptr = ptr.next;
-            i++;
-        }
-        size++;
-    }
-    
-    //노드의 index 반환하기
-    public int indexOf(E data){
-        if(head == null){
-            return -1;
-        }
-        int i =0;
-        Node<E> ptr = head;
-        while (ptr != null){
-            if(ptr.data.equals(data)){
-                return i;
-            }
-            ptr = ptr.next;
-            i++;
-        }
-        return -1;
-    }
-
-    //index 에 해당되는 노드 가져오기
-    public E get(int index){
-        if(index >= size || head == null){
-            return null;
-        }
-        int i =0;
-        Node<E> ptr = head;
-        while (ptr != null){
-            if(i == index){
-                return ptr.data;
-            }
-            ptr = ptr.next;
-            i++;
-        }
-        return null;
-    }
-    
     //노드 클래스
     class Node<E>{
         //데이터
