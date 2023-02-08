@@ -66,7 +66,7 @@ public class PriorityQueue<E> {
     }
 
     //추가, 맨 뒤에 추가
-    public void add(E element){
+    public void offer(E element){
         if(!(element instanceof E)){
             throw new ClassCastException();
         }
@@ -94,7 +94,7 @@ public class PriorityQueue<E> {
     }
 
     //제거, 맨 앞을 제거한다.
-    public E remove(){
+    public E poll(){
         if(size <= 0){
             System.out.println("size 0 입니다.");
             return null;
@@ -108,18 +108,23 @@ public class PriorityQueue<E> {
         while (getLeftChild(targetIndex) <= lastIndex){
             //우선 부모 인덱스를 가장 큰 인덱스로 둔다.
             int largestIndex = targetIndex;
-            int leftChild = (targetIndex*2+1);
-            int rightChild = (targetIndex*2+2);
+            int leftChild = getLeftChild(targetIndex);
+            int rightChild = getLeftChild(targetIndex);
+
+            //부모 왼쪽 자식 비교
             int compare = compare(leftChild,largestIndex);
             if(compare > 0){
                 largestIndex = leftChild;
             }
+
+            //부모 오른쪽 자식 비교
             if(rightChild <= lastIndex){
                 compare = compare(rightChild,largestIndex);
                 if(compare > 0){
                     largestIndex = rightChild;
                 }
             }
+
             //heap 상태가 아님.
             if(targetIndex != largestIndex){
                 //교환
@@ -135,10 +140,48 @@ public class PriorityQueue<E> {
         return element;
     }
 
+    //현재 크기 리턴
+    public int size(){
+        return size;
+    }
+
+    //peek
+    public E peek() throws NoSuchFieldException {
+        if(size <= 0){
+            throw new NoSuchFieldException();
+        }
+        return (E) heapList[0];
+    }
+
+    public boolean isEmpty(){
+        if(size <= 0){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean contains(E e){
+        for(int i=0;i<size;i++){
+            if(e.equals(heapList[i])){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void clear(){
+        for(int i=0;i<size;i++){
+            heapList[i] = null;
+        }
+        size = 0;
+    }
+
     public void printAll(){
         for(int i=0;i<size;i++){
             System.out.print(heapList[i]+"   ");
         }
         System.out.println();
     }
+
+
 }
